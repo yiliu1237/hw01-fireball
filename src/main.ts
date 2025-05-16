@@ -74,8 +74,8 @@ function main() {
 
   const gui = new DAT.GUI();
   gui.add(controls, "tesselations", 0, 8, 1);
-  gui.add(controls, "octaves", 1, 4, 1);
-  gui.add(controls, "speed", 0.5, 4, 0.1);
+  gui.add(controls, "octaves", 1, 5, 1);
+  gui.add(controls, "speed", 0.1, 5, 0.1);
   gui.addColor(controls, "color_outer");
   gui.addColor(controls, "color_inner1");
   gui.addColor(controls, "color_inner2");
