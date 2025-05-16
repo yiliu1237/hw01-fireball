@@ -1,5 +1,8 @@
 const path = require('path');
 
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   entry: path.resolve(__dirname, "src/main"),
@@ -34,4 +37,11 @@ module.exports = {
       overlay: true,
     }
   },
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public', to: '' }, // copies contents of public/ into dist/
+      ],
+    }),
+  ]
 };
