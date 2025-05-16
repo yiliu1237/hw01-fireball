@@ -4,7 +4,8 @@ This project demonstrates a stylized, animated fireball rendered with WebGL usin
 
 ## Demo
 
-[Live Demo Link](#) - *()*
+[Live Demo Link](#)  
+*(Animated preview: `demo/demo.gif`)*
 
 
 ## Features
@@ -19,7 +20,7 @@ This project demonstrates a stylized, animated fireball rendered with WebGL usin
   - Noise octaves
   - Speed
   - Tesselation level
-  - "Reset to Defaults" button
+  - "Reset" button
 - Post-processing snow shader drawn over full-screen quad
 
 
