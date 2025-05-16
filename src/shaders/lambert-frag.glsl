@@ -24,7 +24,6 @@ void main() {
   // Sample texture (optional)
   vec4 texColor = texture(u_Texture, fs_UV);
 
-
   vec3 base = texColor.rgb;  // Use texture directly
   vec3 finalColor = base;  // Ambient te
 

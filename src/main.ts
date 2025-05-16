@@ -17,8 +17,8 @@ const controls = {
   color_inner1: [241, 102, 0],
   color_inner2: [255, 200, 54],
   color_inner3: [0, 23, 255],
-  octaves: 2,
-  speed: 2.2,
+  octaves: 3,
+  speed: 3.,
   noiseSelection: "Worley",
   "Load Scene": loadScene,
 };
@@ -80,7 +80,7 @@ function main() {
   gui.addColor(controls, "color_inner1");
   gui.addColor(controls, "color_inner2");
   gui.addColor(controls, "color_inner3");
-  gui.add({ reset: () => Object.assign(controls, defaultControls) && gui.updateDisplay() }, "reset").name("Reset to Defaults");
+  gui.add({ reset: () => Object.assign(controls, defaultControls) && gui.updateDisplay() }, "reset").name("Reset Settings");
 
   const canvas = <HTMLCanvasElement>document.getElementById("canvas");
   const gl = <WebGL2RenderingContext>canvas.getContext("webgl2");
@@ -123,25 +123,29 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require("./shaders/snow-frag.glsl")),
   ]);
 
+
+  function updateIcosphere() {
+    icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1.0, prevTesselations);
+    icosphere.create();
+  }
+
   function tick() {
     camera.update();
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
 
+    const shouldUpdateIcosphere = controls.tesselations !== prevTesselations;
+    if (shouldUpdateIcosphere) {
+      prevTesselations = controls.tesselations;
+      updateIcosphere();
+    }
 
     const convertColor = (c: number[]) => c.map(x => x / 255.0).concat([1]);
     const outer = convertColor(controls.color_outer);
     const inner1 = convertColor(controls.color_inner1);
     const inner2 = convertColor(controls.color_inner2);
     const inner3 = convertColor(controls.color_inner3);
-
-    gl.disable(gl.DEPTH_TEST);
-    snowShader.use();
-    snowShader.setUniform1f("u_Time", performance.now() * 0.001);
-    snowShader.setUniform2f("u_Resolution", window.innerWidth, window.innerHeight);
-    renderer.render(camera, snowShader, [screenQuad]);
-
 
     lambert.use();
     gl.activeTexture(gl.TEXTURE0);
@@ -167,6 +171,31 @@ function main() {
 
     gl.depthMask(true);
     gl.enable(gl.DEPTH_TEST);
+
+
+    gl.disable(gl.DEPTH_TEST);
+    snowShader.use();
+    snowShader.setUniform1f("u_Time", performance.now() * 0.001);
+    snowShader.setUniform2f("u_Resolution", window.innerWidth, window.innerHeight);
+
+    //Even if we render something first, WebGL still uses whatever state is active when it draws the object.
+    // If snowShader uses blending or gets affected by culling, depth mask, etc., it depends entirely on the GL state at that exact moment.
+    // So this line will effect by "gl.enable(gl.CULL_FACE);" after it
+    gl.disable(gl.CULL_FACE);  // - very important
+    gl.disable(gl.DEPTH_TEST);
+    gl.depthMask(false);
+    gl.enable(gl.BLEND);
+    renderer.render(camera, snowShader, [screenQuad]);
+
+
+    // Restore state if needed
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthMask(true);
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
+    gl.disable(gl.BLEND);
+
+
 
     stats.end();
     requestAnimationFrame(tick);

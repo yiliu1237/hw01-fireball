@@ -37,6 +37,7 @@ class ShaderProgram {
     for (let shader of shaders) {
       gl.attachShader(this.prog, shader.shader);
     }
+
     gl.linkProgram(this.prog);
     if (!gl.getProgramParameter(this.prog, gl.LINK_STATUS)) {
       throw gl.getProgramInfoLog(this.prog);
@@ -142,6 +143,7 @@ class ShaderProgram {
     if (this.attrPos != -1) gl.disableVertexAttribArray(this.attrPos);
     if (this.attrNor != -1) gl.disableVertexAttribArray(this.attrNor);
     if (this.attrUV != -1)  gl.disableVertexAttribArray(this.attrUV);
+
   }
 };
 
