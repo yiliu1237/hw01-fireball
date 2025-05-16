@@ -3,9 +3,7 @@
 This project demonstrates a stylized, animated fireball rendered with WebGL using layered noise-based vertex displacements and fragment shading. The flame effect is enhanced with GUI controls, interactive mouse-based deformation, and a post-processing snow shader.
 
 ## Demo
-
-[Live Demo Link](#)  
-*(Animated preview: `demo/demo.gif`)*
+![Fireball Demo](demo/demo.gif)
 
 
 ## Features
