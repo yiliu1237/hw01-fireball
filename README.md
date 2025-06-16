@@ -21,9 +21,3 @@ This project demonstrates a stylized, animated fireball rendered with WebGL usin
   - "Reset" button
 - Post-processing snow shader drawn over full-screen quad
 
-
-## Getting Started
-
-```bash
-npm install
-npm start
